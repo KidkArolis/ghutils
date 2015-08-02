@@ -2,6 +2,7 @@ const jsonist = require('jsonist')
     , xtend   = require('xtend')
     , qs      = require('querystring')
     , url     = require('url')
+    , util    = require('util')
 
     , apiRoot = 'https://api.github.com'
 
@@ -54,8 +55,10 @@ function lister (auth, urlbase, options, callback) {
       if (err)
         return callback(err)
 
-      if (data.length)
+      if (util.isArray(data) && data.length)
         retdata.push.apply(retdata, data)
+      else
+        retdata.push(data)
 
       var nextUrl = getNextUrl(res.headers.link)
       if (nextUrl)
